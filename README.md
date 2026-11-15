@@ -36,12 +36,12 @@ la primera vez aparecen desmarcadas.
 
 ## Stack
 
-| Pieza | Uso |
-|---|---|
-| Vite 8 + React 19 + TypeScript | Build y SPA |
-| TanStack Query 5 | Datos remotos, caché y mutación optimista |
-| Vitest 5 + Testing Library + MSW 3 | Tests con la API mockeada a nivel de red |
-| CSS plano | Estilos (un solo archivo, variables CSS) |
+| Pieza                              | Uso                                       |
+| ---------------------------------- | ----------------------------------------- |
+| Vite 8 + React 19 + TypeScript     | Build y SPA                               |
+| TanStack Query 5                   | Datos remotos, caché y mutación optimista |
+| Vitest 5 + Testing Library + MSW 3 | Tests con la API mockeada a nivel de red  |
+| CSS plano                          | Estilos (un solo archivo, variables CSS)  |
 
 ## Requisitos
 
@@ -112,3 +112,40 @@ src/
   duplicadas, el post local usa un `crypto.randomUUID()` y se marca como local.
 - Por eso no se invalida la caché tras crear: un refetch borraría el post recién
   añadido.
+
+
+
+## Desiciones
+
+El stack usado, y que la IA lo hiciera todo, yo solo ver el plan y corregir.
+
+
+
+## Con mas tiempo
+
+Se podria hacer un backend con un gestor de base de datos.
+
+
+
+## IA
+
+A la IA primero le di un resumen hecho anteriormente del stack escogido, y ya creado el proyecto con sus dependencias y luego:
+
+Le pedi en modo plan: Haz una pequeña app con React y TypeScript que use la API pública https://jsonplaceholder.typicode.com
+
+1. Lista de usuarios con búsqueda por nombre.
+2. Al elegir un usuario, ver sus publicaciones y crear una nueva con un formulario validado (título y texto obligatorios). La API no guarda los datos de verdad, así que basta con que la nueva publicación aparezca en la lista.
+3. Estados de carga y de error visibles.
+4. Al menos 3 tests con Vitest o Jest y Testing Library.
+
+Le pedi una posible UI, cuando estuve conforme con el plan le pedi que lo ejecutara.
+
+Despues commit.
+
+No encontre algo para corregirla, luego de ejecutar el plan.
+
+Luego le pedi que pusiera dos checkbox, uno de una demora para que se viera los estados de carga y otro de forzar error 500 para que se vean los errores y donde se muestran los errores. Lo hizo y vi que cuando se marcaba alguno de los dos se volvia a recargar la aplicacion, no era lo que queria, asi que le pedi que no actualizara nada cuando se marcaban o desmarcaban, asi que si se marca forzar error 500 y se da click en un usuario da error y se muestra el error.
+
+Luego le pedi que guardara el estado de los checkbox en localstorage para que se mantuviera entre cargas de la pagina.
+
+Todo eso quedo registrado en los commits.
