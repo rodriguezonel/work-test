@@ -1,75 +1,95 @@
-# React + TypeScript + Vite
+# Publicaciones · JSONPlaceholder
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Pequeña SPA en **React + TypeScript** que consume la API pública
+[jsonplaceholder.typicode.com](https://jsonplaceholder.typicode.com).
 
-Currently, two official plugins are available:
+## Qué incluye
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Lista de los 10 usuarios con búsqueda por nombre (sin distinguir mayúsculas).
+- Al elegir un usuario se muestran sus publicaciones.
+- Alta de publicación con formulario validado: **título** y **texto** obligatorios.
+  La API no persiste los datos; el post se añade de forma optimista a la lista y,
+  si la petición falla, se revierte.
+- Estados visibles de carga (skeletons), error con botón **Reintentar**,
+  lista vacía y envío en curso.
+- Diseño responsive de dos paneles (usuarios / publicaciones) con modo claro y
+  oscuro según la preferencia del sistema.
 
-## React Compiler
+## Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+| Pieza | Uso |
+|---|---|
+| Vite 8 + React 19 + TypeScript | Build y SPA |
+| TanStack Query 5 | Datos remotos, caché y mutación optimista |
+| Vitest 5 + Testing Library + MSW 3 | Tests con la API mockeada a nivel de red |
+| CSS plano | Estilos (un solo archivo, variables CSS) |
 
-## Expanding the ESLint configuration
+## Requisitos
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- Node.js 20 o superior
+- npm
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Instalación
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+## Ejecutar en desarrollo
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+```bash
+npm run dev
+```
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Abre **http://localhost:5173**. Vite recarga la página automáticamente al guardar.
+
+Opciones:
+
+```bash
+npm run dev -- --host        # accesible desde la red local
+npm run dev -- --port 3000   # cambiar el puerto
+```
+
+## Build de producción
+
+```bash
+npm run build     # genera dist/ (incluye comprobación de tipos con tsc -b)
+npm run preview   # sirve dist/ para probarlo en local
+```
+
+## Tests
+
+```bash
+npm run test        # modo watch
+npm run test:run    # una pasada (CI)
+npm run test:coverage
+```
+
+Hay 6 tests repartidos en 4 archivos:
+
+- `src/test/user-list.test.tsx` — listado y búsqueda.
+- `src/test/posts.test.tsx` — carga de publicaciones y estado vacío.
+- `src/test/post-form.test.tsx` — validación, creación y rollback si falla el POST.
+- `src/test/error-retry.test.tsx` — error de red y reintento.
+
+## Estructura
 
 ```
+src/
+  api/jsonplaceholder.ts    # tipos y llamadas a la API
+  lib/validatePost.ts       # validación pura del formulario
+  lib/initials.ts           # iniciales para los avatares
+  hooks/                    # useUsers, usePosts, useCreatePost
+  components/               # UserSearch, UserList, PostList, PostForm, QueryState
+  test/                     # setup de MSW, fixtures, utilidades y tests
+  App.tsx                   # composición y estado de selección/búsqueda
+  main.tsx                  # QueryClientProvider
+  styles.css                # estilos y tema claro/oscuro
+```
+
+## Notas
+
+- `POST /posts` devuelve siempre `id: 101` y no guarda nada. Para evitar claves
+  duplicadas, el post local usa un `crypto.randomUUID()` y se marca como local.
+- Por eso no se invalida la caché tras crear: un refetch borraría el post recién
+  añadido.
