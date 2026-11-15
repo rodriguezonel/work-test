@@ -102,6 +102,41 @@ textarea {
   font-size: 0.9rem;
 }
 
+.app-header-side {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.demo-controls {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.demo-controls label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.demo-controls input {
+  width: 15px;
+  height: 15px;
+  margin: 0;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
 .badge {
   display: inline-flex;
   align-items: center;
@@ -485,6 +520,15 @@ textarea {
 @media (max-width: 900px) {
   .layout {
     grid-template-columns: 1fr;
+  }
+
+  .app-header {
+    flex-wrap: wrap;
+  }
+
+  .app-header-side {
+    width: 100%;
+    justify-content: flex-start;
   }
 
   .users-panel {

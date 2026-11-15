@@ -15,6 +15,20 @@ Pequeña SPA en **React + TypeScript** que consume la API pública
 - Diseño responsive de dos paneles (usuarios / publicaciones) con modo claro y
   oscuro según la preferencia del sistema.
 
+## Modo demo
+
+En la cabecera hay dos casillas, desmarcadas por defecto:
+
+- **Demora (1,2 s):** añade latencia artificial a todas las peticiones para ver
+  los skeletons y el estado “Enviando…” con calma.
+- **Forzar error 500:** hace fallar todas las peticiones como si el servidor
+  estuviera caído: error en usuarios, error en publicaciones, reintento que
+  vuelve a fallar y rollback al crear un post.
+
+Ambas se desactivan automáticamente al ejecutar los tests (`MODE === 'test'`), y
+los controles ni siquiera se renderizan en ese entorno. Al recargar la página
+vuelven a estar desmarcadas.
+
 ## Stack
 
 | Pieza | Uso |

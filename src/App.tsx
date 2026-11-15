@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { PostForm } from './components/PostForm'
 import { PostList } from './components/PostList'
@@ -5,12 +6,22 @@ import { QueryState } from './components/QueryState'
 import { UserList } from './components/UserList'
 import { UserSearch } from './components/UserSearch'
 import { useUsers } from './hooks/useUsers'
+import { DEMO_ACTIVE, setDemoOptions, type DemoOptions } from './lib/demo'
 import { initials } from './lib/initials'
 
 function App() {
   const [search, setSearch] = useState('')
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null)
+  const [slow, setSlow] = useState(false)
+  const [forceError, setForceError] = useState(false)
   const usersQuery = useUsers()
+  const queryClient = useQueryClient()
+
+  const updateDemo = (next: Partial<DemoOptions>) => {
+    setDemoOptions(next)
+    // Borra la caché y relanza las queries activas para ver skeleton/error al instante.
+    void queryClient.resetQueries()
+  }
 
   const selectedUser =
     usersQuery.data?.find((user) => user.id === selectedUserId) ?? null
@@ -22,7 +33,40 @@ function App() {
           <h1>Publicaciones</h1>
           <p className="app-subtitle">Demo con JSONPlaceholder</p>
         </div>
-        <span className="badge">Datos de demo</span>
+
+        <div className="app-header-side">
+          {DEMO_ACTIVE && (
+            <fieldset className="demo-controls">
+              <legend className="visually-hidden">Modo demo</legend>
+
+              <label>
+                <input
+                  type="checkbox"
+                  checked={slow}
+                  onChange={(event) => {
+                    setSlow(event.target.checked)
+                    updateDemo({ slow: event.target.checked })
+                  }}
+                />
+                Demora (1,2 s)
+              </label>
+
+              <label>
+                <input
+                  type="checkbox"
+                  checked={forceError}
+                  onChange={(event) => {
+                    setForceError(event.target.checked)
+                    updateDemo({ forceError: event.target.checked })
+                  }}
+                />
+                Forzar error 500
+              </label>
+            </fieldset>
+          )}
+
+          <span className="badge">Datos de demo</span>
+        </div>
       </header>
 
       <div className="layout">
