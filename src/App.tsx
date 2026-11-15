@@ -5,19 +5,24 @@ import { QueryState } from './components/QueryState'
 import { UserList } from './components/UserList'
 import { UserSearch } from './components/UserSearch'
 import { useUsers } from './hooks/useUsers'
-import { DEMO_ACTIVE, setDemoOptions, type DemoOptions } from './lib/demo'
+import {
+  DEMO_ACTIVE,
+  getDemoOptions,
+  setDemoOptions,
+  type DemoOptions,
+} from './lib/demo'
 import { initials } from './lib/initials'
 
 function App() {
   const [search, setSearch] = useState('')
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null)
-  const [slow, setSlow] = useState(false)
-  const [forceError, setForceError] = useState(false)
+  const [demo, setDemo] = useState<DemoOptions>(getDemoOptions)
   const usersQuery = useUsers()
+  const { slow, forceError } = demo
 
   const updateDemo = (next: Partial<DemoOptions>) => {
     // Solo cambia el flag: las peticiones fallan o se demoran cuando las dispara el usuario.
-    setDemoOptions(next)
+    setDemo(setDemoOptions(next))
   }
 
   const selectedUser =
@@ -41,7 +46,6 @@ function App() {
                   type="checkbox"
                   checked={slow}
                   onChange={(event) => {
-                    setSlow(event.target.checked)
                     updateDemo({ slow: event.target.checked })
                   }}
                 />
@@ -53,7 +57,6 @@ function App() {
                   type="checkbox"
                   checked={forceError}
                   onChange={(event) => {
-                    setForceError(event.target.checked)
                     updateDemo({ forceError: event.target.checked })
                   }}
                 />

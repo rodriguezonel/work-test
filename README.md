@@ -30,8 +30,9 @@ Los toggles no recargan los datos ya cargados: el efecto se ve en la siguiente
 petición (elegir un usuario sin caché, publicar o reintentar). La lista de
 usuarios ya visible no vuelve a pedirse, así que permanece usable. Ambas casillas
 se desactivan automáticamente al ejecutar los tests (`MODE === 'test'`), y los
-controles ni siquiera se renderizan en ese entorno. Al recargar la página vuelven
-a estar desmarcadas.
+controles ni siquiera se renderizan en ese entorno. El estado de las casillas se
+guarda en `localStorage` (`demo-options`) y se recupera al recargar la página;
+la primera vez aparecen desmarcadas.
 
 ## Stack
 
