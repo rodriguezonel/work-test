@@ -1,4 +1,3 @@
-import { useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { PostForm } from './components/PostForm'
 import { PostList } from './components/PostList'
@@ -15,12 +14,10 @@ function App() {
   const [slow, setSlow] = useState(false)
   const [forceError, setForceError] = useState(false)
   const usersQuery = useUsers()
-  const queryClient = useQueryClient()
 
   const updateDemo = (next: Partial<DemoOptions>) => {
+    // Solo cambia el flag: las peticiones fallan o se demoran cuando las dispara el usuario.
     setDemoOptions(next)
-    // Borra la caché y relanza las queries activas para ver skeleton/error al instante.
-    void queryClient.resetQueries()
   }
 
   const selectedUser =

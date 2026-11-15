@@ -19,15 +19,19 @@ Pequeña SPA en **React + TypeScript** que consume la API pública
 
 En la cabecera hay dos casillas, desmarcadas por defecto:
 
-- **Demora (1,2 s):** añade latencia artificial a todas las peticiones para ver
-  los skeletons y el estado “Enviando…” con calma.
-- **Forzar error 500:** hace fallar todas las peticiones como si el servidor
-  estuviera caído: error en usuarios, error en publicaciones, reintento que
-  vuelve a fallar y rollback al crear un post.
+- **Demora (1,2 s):** añade latencia artificial a las peticiones que se hagan a
+  partir de ese momento, para ver los skeletons y el estado “Enviando…” con calma.
+- **Forzar error 500:** hace fallar las peticiones posteriores como si el
+  servidor estuviera caído: al elegir un usuario falla la carga de sus
+  publicaciones, al publicar se revierte el post, y “Reintentar” vuelve a fallar
+  mientras siga marcado.
 
-Ambas se desactivan automáticamente al ejecutar los tests (`MODE === 'test'`), y
-los controles ni siquiera se renderizan en ese entorno. Al recargar la página
-vuelven a estar desmarcadas.
+Los toggles no recargan los datos ya cargados: el efecto se ve en la siguiente
+petición (elegir un usuario sin caché, publicar o reintentar). La lista de
+usuarios ya visible no vuelve a pedirse, así que permanece usable. Ambas casillas
+se desactivan automáticamente al ejecutar los tests (`MODE === 'test'`), y los
+controles ni siquiera se renderizan en ese entorno. Al recargar la página vuelven
+a estar desmarcadas.
 
 ## Stack
 
